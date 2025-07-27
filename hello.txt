@@ -1,1 +1,2 @@
 Hello Git
+Another line to see what effects a change in a git-added file has
