@@ -1,20 +1,44 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Register
+Register
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
-        </div>
-                <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Password Confirmation" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Register</button>
-    </form>
+<form id= "registerForm" action="/register" method="post">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username"
+            type="text">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Password Confirmation"
+            type="password">
+    </div>
+    <p id="error_msg" style="color: red;"></p>
+    <button class="btn btn-primary" type="submit">Register</button>
+</form>
+<script>
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const errorMsg = document.getElementById("error_msg");
+        errorMsg.textContent = "";
+
+        const res = await fetch("/register", {
+            method: "POST",
+            body: new FormData(form)
+        });
+
+        if (!res.ok) {
+            const msg = await res.text();
+            errorMsg.textContent = msg || "Register failed";
+        } else {
+            // success – redirect manually
+            window.location.href = "/";
+        }
+    });
+</script>
 {% endblock %}
